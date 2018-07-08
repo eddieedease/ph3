@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "ss.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 208,
+				"h": 95
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Hat_man2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 100,
+						"h": 100
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 7,
+						"w": 70,
+						"h": 93
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 70,
+						"h": 93
+					}
+				},
+				{
+					"filename": "Hat_man4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 100,
+						"h": 100
+					},
+					"spriteSourceSize": {
+						"x": 11,
+						"y": 7,
+						"w": 66,
+						"h": 93
+					},
+					"frame": {
+						"x": 73,
+						"y": 1,
+						"w": 66,
+						"h": 93
+					}
+				},
+				{
+					"filename": "Hat_man1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 100,
+						"h": 100
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 11,
+						"w": 66,
+						"h": 89
+					},
+					"frame": {
+						"x": 141,
+						"y": 1,
+						"w": 66,
+						"h": 89
+					}
+				},
+				{
+					"filename": "Hat_man3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 100,
+						"h": 100
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 11,
+						"w": 66,
+						"h": 89
+					},
+					"frame": {
+						"x": 141,
+						"y": 1,
+						"w": 66,
+						"h": 89
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:047bbd9fd16d8783614b98098f6a12c6:c42a154bd56748b8cd364ca0a233cc7a:7a7dafe8686879c23378e53f9469620c$"
+	}
+}

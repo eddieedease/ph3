@@ -1,0 +1,26 @@
+{
+  "name": "phaser3-testings",
+  "version": "1.0.9",
+  "description": "Testing with phaser 3",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "npm run build && webpack-dev-server --port=8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT",
+  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+  "homepage": "https://edease.nl",
+  "devDependencies": {
+    "webpack-dev-server": "^2.11.0",
+    "webpack": "^3.4.1",
+    "raw-loader": "^0.5.1"
+  },
+  "dependencies": {
+    "phaser": "^3.3.0"
+  }
+}
