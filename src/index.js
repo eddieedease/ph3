@@ -23,8 +23,12 @@ var cursors;
 
 
 function preload() {
+    
     this.load.image('bg', 'assets/bg.png');
     this.load.image('johnny', 'assets/johnny.png');
+    // load our atlasfile
+    this.load.atlas('ss', 'assets/spritesheets/ss.png', 'assets/spritesheets/ss.json');
+
 }
 
 function create() {
@@ -36,12 +40,20 @@ function create() {
    this.physics.world.setBounds(0, 0, 1230, 700);
 
 
-    
- 
+    //  This frame is in the 1st atlas file (set0/data0)
+   
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    player =  this.physics.add.image(20, config.height - 230, 'johnny');
+    this.add.image(1000, config.height - 230, 'johnny');
+
+   
+    this.anims.create({ key: 'everything', frames: this.anims.generateFrameNames('ss'), repeat: -1 });
+    //this.anims.create({ key: 'idle', frames: [0], repeat: -1 });
+
+
+    player = this.physics.add.sprite(20, config.height - 180, 'ss').play('everything').setScale(1);
+    
 
     player.setCollideWorldBounds(true);
 
@@ -64,6 +76,7 @@ function create() {
 
 }
 
+// UPDATE FUNCTION
 function update ()
 {
     player.setVelocity(0);
