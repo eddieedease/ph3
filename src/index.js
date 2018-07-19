@@ -33,6 +33,10 @@ var Game1 = new Phaser.Class({
 
             console.log('Starting');
 
+          
+            var game2 = this.scene.get('game2');
+
+            game2.reloadScene();
             this.scene.switch('game2');
 
         }, this);
@@ -104,6 +108,11 @@ var Game2 = new Phaser.Class({
         this.load.image('bubble', 'assets/bubble.png');
         // load our atlasfile
         this.load.atlas('ss', 'assets/spritesheets/ss.png', 'assets/spritesheets/ss.json');
+
+        this.load.audio('audio_bg', [
+            'assets/audio/bg1.ogg',
+            'assets/audio/bg1.mp3'
+        ]);
     },
 
     create: function () {
@@ -171,6 +180,20 @@ var Game2 = new Phaser.Class({
 
         this.cameras.main.startFollow(this.player);
 
+
+
+
+        // play some music
+        this.bgmusic = this.sound.add('audio_bg');
+
+        this.bgmusic.play();
+
+
+
+
+
+
+
         // this.cameras.main.followOffset.set(-300, 0);
 
         this.input.keyboard.on('keydown', function (event) {
@@ -184,6 +207,7 @@ var Game2 = new Phaser.Class({
 
             console.log('Starting');
             this.scene.switch('game1');
+            this.bgmusic.stop();
         }, this);
 
 
@@ -249,6 +273,16 @@ var Game2 = new Phaser.Class({
     shutdown: function () {
         //  We need to clear keyboard events, or they'll stack up when the Menu is re-run
         this.input.keyboard.shutdown();
+        
+    },
+
+    reloadScene : function (){
+        
+        console.log("yihah");
+        if (this.bgmusic){
+            this.bgmusic.play();
+        }
+        // 
     }
 
 
