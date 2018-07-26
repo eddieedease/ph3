@@ -25,6 +25,12 @@ var Game1 = new Phaser.Class({
             key: 'tileset',
             url: 'assets/tilemaps/tileset.json'
         });
+
+        this.load.spritesheet('walker', 'assets/spritesheets/walker2.png', {
+            frameWidth: 64,
+            frameHeight: 64
+        });
+
     },
 
     create: function () {
@@ -33,7 +39,7 @@ var Game1 = new Phaser.Class({
 
             console.log('Starting');
 
-          
+
             var game2 = this.scene.get('game2');
 
             game2.reloadScene();
@@ -41,36 +47,108 @@ var Game1 = new Phaser.Class({
 
         }, this);
 
+        this.debugGraphics = this.add.graphics();
+
 
         // loading the json tilemap
-        var map = this.make.tilemap({
+        this.map = this.make.tilemap({
             key: 'tileset'
         });
 
-        var tiles = map.addTilesetImage('tileset', 'tiles');
+        var tiles = this.map.addTilesetImage('tileset', 'tiles');
 
-        var layer1 = map.createStaticLayer(0, tiles, 0, 0);
-        var layer2 = map.createStaticLayer(1, tiles, 0, 0);
+        var layer1 = this.map.createStaticLayer(0, tiles, 0, 0);
+        this.layercol = this.map.createStaticLayer(2, tiles, 0, 0);
 
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.layercol.visible = false;
+        this.map.setCollisionBetween(41, 44);
+        
+
+        // walker config form png sequense
+        var walkerup = {
+            key: 'walkerup',
+            frames: this.anims.generateFrameNumbers('walker', {
+                start: 64,
+                end: 79
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
+
+        var walkerdown = {
+            key: 'walkerdown',
+            frames: this.anims.generateFrameNumbers('walker', {
+                start: 0,
+                end: 15
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
+
+        var walkerside = {
+            key: 'walkerside',
+            frames: this.anims.generateFrameNumbers('walker', {
+                start: 16,
+                end: 31
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
+
+        var walkeridle = {
+            key: 'walkeridle',
+            frames: this.anims.generateFrameNumbers('walker', {
+                start: 16,
+                end: 16
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
+
+
+        this.anims.create(walkerup);
+        this.anims.create(walkerdown);
+        this.anims.create(walkerside);
+        this.anims.create(walkeridle);
+
+
+
+
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+
+
+        // the walker
+        this.player = this.physics.add.sprite(80, 30, 'walker');
+
+        // collision tileset and player
+        this.physics.add.collider(this.player, this.layercol);
+
+
+        var layer2 = this.map.createStaticLayer(1, tiles, 0, 0);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        var controlConfig = {
-            camera: this.cameras.main,
-            left: this.cursors.left,
-            right: this.cursors.right,
-            up: this.cursors.up,
-            down: this.cursors.down,
-            speed: 0.5
-        };
+        // var controlConfig = {
+        //     camera: this.cameras.main,
+        //     left: this.cursors.left,
+        //     right: this.cursors.right,
+        //     up: this.cursors.up,
+        //     down: this.cursors.down,
+        //     speed: 0.5
+        // };
 
-        this.controls = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
+        // this.controls = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
 
+
+        // follow player
+        this.cameras.main.startFollow(this.player);
+
+        // camera shake
         this.input.on('pointerdown', function () {
 
             this.cameras.main.shake(100);
-    
+
         }, this);
 
         this.helpText = this.add.text(16, 16, 'Press 1 | 2', {
@@ -79,10 +157,73 @@ var Game1 = new Phaser.Class({
         });
         this.helpText.setScrollFactor(0);
 
-    }
-    ,
+
+        
+
+    },
     update: function (time, delta) {
-        this.controls.update(delta);
+        // this.controls.update(delta);
+        this.player.setVelocity(0);
+
+        var _newstate;
+
+
+        if (this.cursors.left.isDown) {
+            _newstate = 'sideways';
+            this.player.setVelocityX(-300);
+            this.player.setFlipX(true);
+            // this.cameras.main.followOffset.x = 300;
+        } else if (this.cursors.right.isDown) {
+            _newstate = 'sideways';
+            this.player.setVelocityX(300);
+            this.player.setFlipX(false);
+            // this.cameras.main.followOffset.x = -300;
+        } else if (this.cursors.up.isDown) {
+            _newstate = 'up';
+            this.player.setVelocityY(-300);
+            // this.cameras.main.followOffset.x = -300;
+        } else if (this.cursors.down.isDown) {
+            _newstate = 'down';
+            this.player.setVelocityY(300);
+            // this.cameras.main.followOffset.x = -300;
+        } else {
+            _newstate = 'idle';
+        }
+        this.update_checkPlayerAnimation(_newstate);
+
+        // debug funtion
+        // this.debug();
+
+    },
+    update_checkPlayerAnimation(_newstate) {
+        // lets check if the animation needs to be changed
+        if (this.player_animstate !== _newstate) {
+            this.player_animstate = _newstate;
+            switch (_newstate) {
+                case 'sideways':
+                    this.player.play('walkerside');
+                    break;
+                case 'idle':
+                    this.player.play('walkeridle');
+                    break;
+                case 'up':
+                    this.player.play('walkerup');
+                    break;
+                case 'down':
+                    this.player.play('walkerdown');
+                    break;
+            }
+        } else {
+            // Do nothing and keep animation going
+        }
+    },
+    debug(){
+        this.debugGraphics.clear();
+        this.map.renderDebug(this.debugGraphics, {
+            tileColor: null, // Non-colliding tiles
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+        });
     }
 
 
@@ -273,13 +414,13 @@ var Game2 = new Phaser.Class({
     shutdown: function () {
         //  We need to clear keyboard events, or they'll stack up when the Menu is re-run
         this.input.keyboard.shutdown();
-        
+
     },
 
-    reloadScene : function (){
-        
+    reloadScene: function () {
+
         console.log("yihah");
-        if (this.bgmusic){
+        if (this.bgmusic) {
             this.bgmusic.play();
         }
         // 
