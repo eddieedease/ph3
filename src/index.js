@@ -119,7 +119,8 @@ var Game1 = new Phaser.Class({
 
 
         // the walker
-        this.player = this.physics.add.sprite(80, 30, 'walker');
+        this.player = this.physics.add.sprite(300, 70, 'walker').setScale(1);
+        
 
         // collision tileset and player
         this.physics.add.collider(this.player, this.layercol);
@@ -170,21 +171,21 @@ var Game1 = new Phaser.Class({
 
         if (this.cursors.left.isDown) {
             _newstate = 'sideways';
-            this.player.setVelocityX(-300);
+            this.player.setVelocityX(-200);
             this.player.setFlipX(true);
             // this.cameras.main.followOffset.x = 300;
         } else if (this.cursors.right.isDown) {
             _newstate = 'sideways';
-            this.player.setVelocityX(300);
+            this.player.setVelocityX(200);
             this.player.setFlipX(false);
             // this.cameras.main.followOffset.x = -300;
         } else if (this.cursors.up.isDown) {
             _newstate = 'up';
-            this.player.setVelocityY(-300);
+            this.player.setVelocityY(-200);
             // this.cameras.main.followOffset.x = -300;
         } else if (this.cursors.down.isDown) {
             _newstate = 'down';
-            this.player.setVelocityY(300);
+            this.player.setVelocityY(200);
             // this.cameras.main.followOffset.x = -300;
         } else {
             _newstate = 'idle';
