@@ -12,11 +12,32 @@ var Game1 = new Phaser.Class({
         function Game1() {
             Phaser.Scene.call(this, {
                 key: 'game1',
-                active: true
+                active: true,
             });
         },
 
     preload: function () {
+
+        // the loader
+        var progress = this.add.graphics();
+
+        this.load.on('progress', function (value) {
+
+            progress.clear();
+            progress.fillStyle(0xffffff, 1);
+            progress.fillRect(0, 270, 800 * value, 60);
+
+        });
+
+        this.load.on('complete', function () {
+
+            progress.destroy();
+
+        });
+
+
+
+
         //this.load.image('picA', 'assets/pics/lance-overdose-loader-eye.png');
         // tilemap json
         this.load.image('tiles', 'assets/tilemaps/tileset.png');
@@ -29,6 +50,11 @@ var Game1 = new Phaser.Class({
         this.load.spritesheet('walker', 'assets/spritesheets/walker2.png', {
             frameWidth: 64,
             frameHeight: 64
+        });
+
+        this.load.spritesheet('playertemplate', 'assets/spritesheets/templatechar.png', {
+            frameWidth: 48,
+            frameHeight: 56
         });
 
     },
@@ -55,6 +81,8 @@ var Game1 = new Phaser.Class({
             key: 'tileset'
         });
 
+
+
         var tiles = this.map.addTilesetImage('tileset', 'tiles');
 
         var layer1 = this.map.createStaticLayer(0, tiles, 0, 0);
@@ -62,7 +90,7 @@ var Game1 = new Phaser.Class({
 
         this.layercol.visible = false;
         this.map.setCollisionBetween(41, 44);
-        
+
 
         // walker config form png sequense
         var walkerup = {
@@ -111,16 +139,60 @@ var Game1 = new Phaser.Class({
         this.anims.create(walkerside);
         this.anims.create(walkeridle);
 
+        // player
+        // walker config form png sequense
+        var playerup = {
+            key: 'playerup',
+            frames: this.anims.generateFrameNumbers('playertemplate', {
+                start: 6,
+                end: 8
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
 
+        var playerdown = {
+            key: 'playerdown',
+            frames: this.anims.generateFrameNumbers('playertemplate', {
+                start: 3,
+                end: 5
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
 
+        var playerside = {
+            key: 'playerside',
+            frames: this.anims.generateFrameNumbers('playertemplate', {
+                start: 0,
+                end: 2
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
+
+        var playeridle = {
+            key: 'playeridle',
+            frames: this.anims.generateFrameNumbers('playertemplate', {
+                start: 4,
+                end: 4
+            }),
+            frameRate: 20,
+            repeat: -1
+        };
+
+        this.anims.create(playerup);
+        this.anims.create(playerdown);
+        this.anims.create(playerside);
+        this.anims.create(playeridle);
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
+        //this.cameras.main.roundPixels(true);
 
 
         // the walker
-        this.player = this.physics.add.sprite(300, 70, 'walker').setScale(1);
-        
+        this.player = this.physics.add.sprite(300, 70, 'playertemplate').setScale(1);
+
 
         // collision tileset and player
         this.physics.add.collider(this.player, this.layercol);
@@ -143,12 +215,16 @@ var Game1 = new Phaser.Class({
 
 
         // follow player
-        this.cameras.main.startFollow(this.player);
+        this.cameras.main.startFollow(this.player, true);
 
+
+        // this.cameras.main.setZoom(2);
+        this.cameras.main.roundPixels = true;
         // camera shake
         this.input.on('pointerdown', function () {
 
             this.cameras.main.shake(100);
+
 
         }, this);
 
@@ -159,7 +235,7 @@ var Game1 = new Phaser.Class({
         this.helpText.setScrollFactor(0);
 
 
-        
+
 
     },
     update: function (time, delta) {
@@ -171,21 +247,21 @@ var Game1 = new Phaser.Class({
 
         if (this.cursors.left.isDown) {
             _newstate = 'sideways';
-            this.player.setVelocityX(-200);
+            this.player.setVelocityX(-300);
             this.player.setFlipX(true);
             // this.cameras.main.followOffset.x = 300;
         } else if (this.cursors.right.isDown) {
             _newstate = 'sideways';
-            this.player.setVelocityX(200);
+            this.player.setVelocityX(300);
             this.player.setFlipX(false);
             // this.cameras.main.followOffset.x = -300;
         } else if (this.cursors.up.isDown) {
             _newstate = 'up';
-            this.player.setVelocityY(-200);
+            this.player.setVelocityY(-300);
             // this.cameras.main.followOffset.x = -300;
         } else if (this.cursors.down.isDown) {
             _newstate = 'down';
-            this.player.setVelocityY(200);
+            this.player.setVelocityY(300);
             // this.cameras.main.followOffset.x = -300;
         } else {
             _newstate = 'idle';
@@ -202,23 +278,23 @@ var Game1 = new Phaser.Class({
             this.player_animstate = _newstate;
             switch (_newstate) {
                 case 'sideways':
-                    this.player.play('walkerside');
+                    this.player.play('playerside');
                     break;
                 case 'idle':
-                    this.player.play('walkeridle');
+                    this.player.play('playeridle');
                     break;
                 case 'up':
-                    this.player.play('walkerup');
+                    this.player.play('playerup');
                     break;
                 case 'down':
-                    this.player.play('walkerdown');
+                    this.player.play('playerdown');
                     break;
             }
         } else {
             // Do nothing and keep animation going
         }
     },
-    debug(){
+    debug() {
         this.debugGraphics.clear();
         this.map.renderDebug(this.debugGraphics, {
             tileColor: null, // Non-colliding tiles
@@ -245,6 +321,25 @@ var Game2 = new Phaser.Class({
         },
 
     preload: function () {
+        // the loader
+        var progress = this.add.graphics();
+
+        this.load.on('progress', function (value) {
+
+            progress.clear();
+            progress.fillStyle(0xffffff, 1);
+            progress.fillRect(0, 270, 800 * value, 60);
+
+        });
+
+        this.load.on('complete', function () {
+
+            progress.destroy();
+
+        });
+
+
+
         this.load.image('bg', 'assets/bg.png');
         this.load.image('johnny', 'assets/johnny.png');
         this.load.image('bubble', 'assets/bubble.png');
