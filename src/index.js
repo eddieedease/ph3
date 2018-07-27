@@ -334,7 +334,7 @@ var Game2 = new Phaser.Class({
 
         this.load.on('complete', function () {
 
-            progress.destroy();
+            progress.des1troy();
 
         });
 
