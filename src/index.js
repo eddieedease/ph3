@@ -35,8 +35,11 @@ var Game1 = new Phaser.Class({
 
         });
 
+        // load bitmapfont
+        this.load.bitmapFont('pixelfont', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
 
 
+        this.load.image('hud', 'assets/hud.png')
 
         //this.load.image('picA', 'assets/pics/lance-overdose-loader-eye.png');
         // tilemap json
@@ -147,7 +150,7 @@ var Game1 = new Phaser.Class({
                 start: 6,
                 end: 8
             }),
-            frameRate: 20,
+            frameRate: 5,
             repeat: -1
         };
 
@@ -157,7 +160,7 @@ var Game1 = new Phaser.Class({
                 start: 3,
                 end: 5
             }),
-            frameRate: 20,
+            frameRate: 5,
             repeat: -1
         };
 
@@ -167,7 +170,7 @@ var Game1 = new Phaser.Class({
                 start: 0,
                 end: 2
             }),
-            frameRate: 20,
+            frameRate: 5,
             repeat: -1
         };
 
@@ -177,7 +180,7 @@ var Game1 = new Phaser.Class({
                 start: 4,
                 end: 4
             }),
-            frameRate: 20,
+            frameRate: 5,
             repeat: -1
         };
 
@@ -215,7 +218,7 @@ var Game1 = new Phaser.Class({
 
 
         // follow player
-        this.cameras.main.startFollow(this.player, true);
+        this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
 
         // this.cameras.main.setZoom(2);
@@ -234,8 +237,9 @@ var Game1 = new Phaser.Class({
         });
         this.helpText.setScrollFactor(0);
 
-
-
+       
+        this.hud = this.add.image(config.width/2, config.height - 100, 'hud').setScrollFactor(0);
+        this.bitmaptext = this.add.bitmapText(100, 600, 'pixelfont', "Yoo1.0").setScrollFactor(0);
 
     },
     update: function (time, delta) {
@@ -334,7 +338,7 @@ var Game2 = new Phaser.Class({
 
         this.load.on('complete', function () {
 
-            progress.des1troy();
+            progress.destroy();
 
         });
 
