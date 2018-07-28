@@ -65,15 +65,10 @@ var Game1 = new Phaser.Class({
     create: function () {
         // INPUT KEYBOARD SWITCH GAME
         this.input.keyboard.on('keyup_ONE', function (event) {
-
             console.log('Starting');
-
-
             var game2 = this.scene.get('game2');
-
             game2.reloadScene();
             this.scene.switch('game2');
-
         }, this);
 
         this.debugGraphics = this.add.graphics();
@@ -87,7 +82,6 @@ var Game1 = new Phaser.Class({
 
 
         var tiles = this.map.addTilesetImage('tileset', 'tiles');
-
         var layer1 = this.map.createStaticLayer(0, tiles, 0, 0);
         this.layercol = this.map.createStaticLayer(2, tiles, 0, 0);
 
@@ -188,11 +182,16 @@ var Game1 = new Phaser.Class({
         this.anims.create(playerdown);
         this.anims.create(playerside);
         this.anims.create(playeridle);
+         // hud camera
+         
+
+
+        this.cameras.main.setSize(900, 700);
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        
         //this.cameras.main.roundPixels(true);
-
-
+        
         // the walker
         this.player = this.physics.add.sprite(300, 70, 'playertemplate').setScale(1);
 
@@ -218,15 +217,17 @@ var Game1 = new Phaser.Class({
 
 
         // follow player
-        this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
+        this.cameras.main.startFollow(this.player, true, 0.7, 0.7);
 
+       
 
         // this.cameras.main.setZoom(2);
         this.cameras.main.roundPixels = true;
         // camera shake
         this.input.on('pointerdown', function () {
 
-            this.cameras.main.shake(100);
+            // this.cameras.main.shake(100);
+            this.cameras.main.flash();
 
 
         }, this);
@@ -237,10 +238,12 @@ var Game1 = new Phaser.Class({
         });
         this.helpText.setScrollFactor(0);
 
-       
         this.hud = this.add.image(config.width/2, config.height - 100, 'hud').setScrollFactor(0);
-        this.bitmaptext = this.add.bitmapText(100, 600, 'pixelfont', "Yoo1.0").setScrollFactor(0);
 
+       
+        this.missiontext = this.add.bitmapText(500, 560, 'pixelfont', "Status: ", 30).setScrollFactor(0);
+        this.missiontext_explain = this.add.bitmapText(500, 590, 'pixelfont', "Exploring...", 20).setScrollFactor(0);
+        this.missiontext_explain.setTint(0xFFFFFF);
     },
     update: function (time, delta) {
         // this.controls.update(delta);
