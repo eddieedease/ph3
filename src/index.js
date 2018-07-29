@@ -81,9 +81,9 @@ var Game1 = new Phaser.Class({
 
 
 
-        var tiles = this.map.addTilesetImage('tileset', 'tiles');
-        var layer1 = this.map.createStaticLayer(0, tiles, 0, 0);
-        this.layercol = this.map.createStaticLayer(2, tiles, 0, 0);
+        var tiles = this.map.addTilesetImage('tileset', 'tiles',64,64);
+        var layer1 = this.map.createStaticLayer(0, tiles, 0, 0).setScale(1);
+        this.layercol = this.map.createStaticLayer(2, tiles, 0, 0).setScale(1);
 
         this.layercol.visible = false;
         this.map.setCollisionBetween(41, 44);
@@ -200,7 +200,7 @@ var Game1 = new Phaser.Class({
         this.physics.add.collider(this.player, this.layercol);
 
 
-        var layer2 = this.map.createStaticLayer(1, tiles, 0, 0);
+        var layer2 = this.map.createStaticLayer(1, tiles, 0, 0).setScale(1);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
