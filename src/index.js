@@ -79,7 +79,7 @@ var Game1 = new Phaser.Class({
     },
 
     create: function () {
-        this.gameScale.setMode('resize-and-fit');
+        this.gameScale.setMode('resize');
         // INPUT KEYBOARD SWITCH GAME
         this.input.keyboard.on('keyup_ONE', function (event) {
             console.log('Starting');
@@ -557,6 +557,7 @@ var config = {
     parent: 'phaser-example',
     width: window.innerWidth,
     height: window.innerHeight,
+    pixelArt: true,
     physics: {
         default: 'arcade',
     },
