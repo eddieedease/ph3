@@ -1,5 +1,5 @@
 import 'phaser';
-
+import GameScalePlugin from '../assets/plugins/GameScalePlugin';
 
 
 
@@ -17,6 +17,22 @@ var Game1 = new Phaser.Class({
         },
 
     preload: function () {
+
+        // this.gameScale.setMode('resize');
+        // Within a scene:
+        this.gameScale.configure({
+            debounce: false,
+            debounceDelay: 100,
+            maxHeight: Infinity,
+            maxWidth: Infinity,
+            minHeight: 0,
+            minWidth: 0,
+            mode: 'resize-and-fit',
+            resizeCameras: true,
+            snap: null,
+        });
+
+         
 
         // the loader
         var progress = this.add.graphics();
@@ -63,6 +79,7 @@ var Game1 = new Phaser.Class({
     },
 
     create: function () {
+        this.gameScale.setMode('resize-and-fit');
         // INPUT KEYBOARD SWITCH GAME
         this.input.keyboard.on('keyup_ONE', function (event) {
             console.log('Starting');
@@ -81,7 +98,7 @@ var Game1 = new Phaser.Class({
 
 
 
-        var tiles = this.map.addTilesetImage('tileset', 'tiles',64,64);
+        var tiles = this.map.addTilesetImage('tileset', 'tiles', 64, 64);
         var layer1 = this.map.createStaticLayer(0, tiles, 0, 0).setScale(1);
         this.layercol = this.map.createStaticLayer(2, tiles, 0, 0).setScale(1);
 
@@ -182,16 +199,16 @@ var Game1 = new Phaser.Class({
         this.anims.create(playerdown);
         this.anims.create(playerside);
         this.anims.create(playeridle);
-         // hud camera
-         
+        // hud camera
+
 
 
         this.cameras.main.setSize(900, 700);
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        
+
         //this.cameras.main.roundPixels(true);
-        
+
         // the walker
         this.player = this.physics.add.sprite(300, 70, 'playertemplate').setScale(1);
 
@@ -217,9 +234,9 @@ var Game1 = new Phaser.Class({
 
 
         // follow player
-        this.cameras.main.startFollow(this.player, true, 0.7, 0.7);
+        this.cameras.main.startFollow(this.player, true, 0.9, 0.9);
 
-       
+
 
         // this.cameras.main.setZoom(2);
         this.cameras.main.roundPixels = true;
@@ -238,11 +255,11 @@ var Game1 = new Phaser.Class({
         });
         this.helpText.setScrollFactor(0);
 
-        this.hud = this.add.image(config.width/2, config.height - 100, 'hud').setScrollFactor(0);
+        this.hud = this.add.image(config.width / 2, config.height - 100, 'hud').setScrollFactor(0);
 
-       
-        this.missiontext = this.add.bitmapText(500, 560, 'pixelfont', "Status: ", 30).setScrollFactor(0);
-        this.missiontext_explain = this.add.bitmapText(500, 590, 'pixelfont', "Exploring...", 20).setScrollFactor(0);
+
+        this.missiontext = this.add.bitmapText(500, config.height - 140, 'pixelfont', "Status: ", 30).setScrollFactor(0);
+        this.missiontext_explain = this.add.bitmapText(500, config.height - 110, 'pixelfont', "Exploring...", 20).setScrollFactor(0);
         this.missiontext_explain.setTint(0xFFFFFF);
     },
     update: function (time, delta) {
@@ -538,12 +555,20 @@ var Game2 = new Phaser.Class({
 var config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 900,
-    height: 700,
+    width: window.innerWidth,
+    height: window.innerHeight,
     physics: {
         default: 'arcade',
     },
-    scene: [Game1, Game2]
+    scene: [Game1, Game2],
+    // Use plugin until scale manager arrives
+    plugins: {
+        global: [{
+            key: 'GameScalePlugin',
+            plugin: GameScalePlugin,
+            mapping: 'gameScale'
+        }]
+    },
 };
 
 
