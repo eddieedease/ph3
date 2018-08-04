@@ -210,7 +210,7 @@ var Game1 = new Phaser.Class({
         //this.cameras.main.roundPixels(true);
 
         // the walker
-        this.player = this.physics.add.sprite(300, 70, 'playertemplate').setScale(1);
+        this.player = this.physics.add.sprite(300, 100, 'playertemplate').setScale(1);
 
 
         // collision tileset and player
@@ -238,7 +238,7 @@ var Game1 = new Phaser.Class({
 
 
 
-        // this.cameras.main.setZoom(2);
+         this.cameras.main.setZoom(2);
         this.cameras.main.roundPixels = true;
         // camera shake
         this.input.on('pointerdown', function () {
@@ -249,13 +249,13 @@ var Game1 = new Phaser.Class({
 
         }, this);
 
-        this.helpText = this.add.text(16, 16, 'Press 1 | 2', {
+        this.helpText = this.add.text(400, 200, 'Press 1 | 2', {
             fontSize: '18px',
             fill: '#ffffff'
-        });
-        this.helpText.setScrollFactor(0);
+        }).setScrollFactor(0);
+     
 
-        this.hud = this.add.image(config.width / 2, config.height - 100, 'hud').setScrollFactor(0);
+        this.hud = this.add.image(config.width / 2, config.height - 170, 'hud').setScrollFactor(0);
 
 
         this.missiontext = this.add.bitmapText(500, config.height - 140, 'pixelfont', "Status: ", 30).setScrollFactor(0);
